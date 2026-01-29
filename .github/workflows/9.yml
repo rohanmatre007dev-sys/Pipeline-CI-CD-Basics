@@ -1,0 +1,25 @@
+name: branch-check # Workflow name
+
+# ---------------------------------------------------------
+# Trigger CI ONLY when pushing to main or develop branches
+# ---------------------------------------------------------
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  branch-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Print branch name using GitHub context
+      - name: Show branch name
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
+
+      # 2) Print commit SHA using GitHub context
+      - name: Show commit SHA
+        run: |
+          echo "Commit SHA: ${{ github.sha }}"

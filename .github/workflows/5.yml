@@ -1,0 +1,37 @@
+name: conditional-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger the workflow manually
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+    inputs:
+      run_tests:
+        description: "Should we run tests?"
+        type: boolean
+        default: false # Default: skip tests
+
+jobs:
+  conditional-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      # -----------------------------------------------------
+      # Step 1: Always run
+      # -----------------------------------------------------
+      - name: Build started
+        run: echo "Build started"
+
+      # -----------------------------------------------------
+      # Step 2: Run if run_tests == true
+      # -----------------------------------------------------
+      - name: Running tests
+        if: ${{ inputs.run_tests }} # TRUE case
+        run: echo "Running tests"
+
+      # -----------------------------------------------------
+      # Step 3: Run if run_tests == false
+      # -----------------------------------------------------
+      - name: Skipping tests
+        if: ${{ !inputs.run_tests }} # FALSE case
+        run: echo "Skipping tests"

@@ -1,0 +1,49 @@
+name: input-demo # Name of the workflow (shown in Actions tab)
+
+# -----------------------------------------------------------
+# Trigger: Manually, from the "Run workflow" button in GitHub
+# -----------------------------------------------------------
+on:
+  workflow_dispatch:
+    inputs:
+      # -------- environment input (choice) --------
+      environment:
+        description: "Target environment"
+        type: choice # user must pick one value
+        required: true # cannot run without selecting it
+        options:
+          - dev
+          - staging
+          - prod
+
+      # -------- debug input (boolean) --------
+      debug:
+        description: "Enable debug mode?"
+        type: boolean # true / false in the UI
+        default: false # default is OFF
+
+jobs:
+  # Job name as required
+  input-demo:
+    runs-on: ubuntu-latest # Single job, ubuntu-latest runner
+
+    steps:
+      # 1) Print selected environment
+      - name: Show selected environment
+        run: |
+          echo "Environment selected: ${{ inputs.environment }}"
+
+      # 2) Print whether debug mode is ON or OFF
+      - name: Show debug status
+        run: |
+          if [ "${{ inputs.debug }}" = "true" ]; then
+            echo "Debug mode is ON"
+          else
+            echo "Debug mode is OFF"
+          fi
+
+      # 3) If debug is true → print "Debugging enabled"
+      #    Here we use an IF condition at the step level.
+      - name: Extra debug message
+        if: ${{ inputs.debug }} # step runs only when debug == true
+        run: echo "Debugging enabled"

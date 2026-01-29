@@ -1,0 +1,43 @@
+name: job-outputs-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  # =======================================================
+  # Job 1: generate
+  # - Creates VERSION=1.0.0
+  # - Exposes it as a JOB OUTPUT
+  # =======================================================
+  generate:
+    runs-on: ubuntu-latest
+
+    # ---- Job outputs (collect from steps below) ----
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
+
+    steps:
+      - name: Set version and expose as step output
+        id: set-version # so we can reference steps.set-version
+        run: |
+          VERSION="1.0.0"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          # This writes a step output named "version"
+
+  # =======================================================
+  # Job 2: consume
+  # - Depends on `generate`
+  # - Reads job output and prints it
+  # =======================================================
+  consume:
+    runs-on: ubuntu-latest
+    needs: generate # must wait for generate
+
+    steps:
+      - name: Print received version
+        run: |
+          echo "Version received: ${{ needs.generate.outputs.version }}"
+          # Expected: "Version received: 1.0.0"

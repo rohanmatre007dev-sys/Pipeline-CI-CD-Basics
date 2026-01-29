@@ -1,0 +1,28 @@
+name: timeout-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: manual execution
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  timeout-demo:
+    runs-on: ubuntu-latest
+
+    # -----------------------------------------------------
+    # Job timeout: 1 minute
+    # After 60 seconds, the whole job fails automatically
+    # -----------------------------------------------------
+    timeout-minutes: 1
+
+    steps:
+      # 1) Print start message
+      - name: Job started
+        run: echo "Job started"
+
+      # 2) Sleep for 90 seconds (longer than the timeout)
+      - name: Long sleep
+        run: sleep 90
+
+      # This step will never run because job will timeout

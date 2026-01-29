@@ -1,0 +1,40 @@
+name: env-precedence-demo # Workflow name
+
+# ----------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ----------------------------------------------------------
+on:
+  workflow_dispatch:
+
+# ----------------------------------------------------------
+# Workflow-level environment variable
+# Lowest precedence (fallback value)
+# ----------------------------------------------------------
+env:
+  APP_MODE: global
+
+jobs:
+  env-demo: # Single job (as required)
+    runs-on: ubuntu-latest
+
+    # ------------------------------------------------------
+    # Job-level environment variable
+    # Overrides the workflow-level APP_MODE
+    # ------------------------------------------------------
+    env:
+      APP_MODE: job-level
+
+    steps:
+      # 1) Normal step: uses the JOB-LEVEL value
+      - name: Print APP_MODE from job level
+        run: |
+          echo "APP_MODE in first step: $APP_MODE"
+          # Expected output: job-level
+
+      # 2) Step with its own env: overrides job & workflow level
+      - name: Print APP_MODE from step level override
+        env:
+          APP_MODE: step-level # Highest precedence
+        run: |
+          echo "APP_MODE in second step: $APP_MODE"
+          # Expected output: step-level

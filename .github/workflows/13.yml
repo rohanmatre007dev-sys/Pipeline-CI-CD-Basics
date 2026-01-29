@@ -1,0 +1,26 @@
+name: permissions-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+# ---------------------------------------------------------
+# Restrict default GITHUB_TOKEN permissions for this workflow
+# to read-only across all scopes.
+# ---------------------------------------------------------
+permissions: read-all
+
+jobs:
+  permissions-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Checkout the repository (uses the limited read-only token)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2) Print confirmation message
+      - name: Confirm hardened permissions
+        run: echo "Permissions hardened"

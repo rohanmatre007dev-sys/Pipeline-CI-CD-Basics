@@ -1,0 +1,48 @@
+name: artifact-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  # =======================================================
+  # Job 1: producer
+  # - Creates build.txt
+  # - Uploads it as an artifact named "build-output"
+  # =======================================================
+  producer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create build.txt file
+        run: |
+          echo "Build successful" > build.txt
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output # artifact name
+          path: build.txt # file to upload
+
+  # =======================================================
+  # Job 2: consumer
+  # - Depends on producer
+  # - Downloads artifact
+  # - Prints file content
+  # =======================================================
+  consumer:
+    runs-on: ubuntu-latest
+    needs: producer # must wait for producer to finish
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output # same artifact name as above
+
+      - name: Show file content
+        run: |
+          echo "Contents of build.txt:"
+          cat build.txt         # Expected: "Build successful"

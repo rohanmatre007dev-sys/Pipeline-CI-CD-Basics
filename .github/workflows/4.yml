@@ -1,0 +1,27 @@
+name: secret-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  secret-demo: # Job name as required
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Just confirm that a key was received (no value shown)
+      - name: Confirm API key
+        run: echo "API key received"
+
+      # 2) Show only the LENGTH of the secret, not the value
+      - name: Show API key length
+        env:
+          # Pass the secret into the step as an environment variable
+          API_KEY: ${{ secrets.API_KEY }}
+        run: |
+          # Use shell string length expansion: ${#VAR}
+          KEY_LENGTH=${#API_KEY}
+          echo "API key length: ${KEY_LENGTH} characters"
+          # NOTE: We never echo $API_KEY itself – only its length.

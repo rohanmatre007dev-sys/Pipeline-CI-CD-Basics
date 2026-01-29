@@ -1,0 +1,26 @@
+name: deploy-sim # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-sim:
+    runs-on: ubuntu-latest
+
+    # -----------------------------------------------------
+    # Environment gate:
+    # - Name MUST match the Environment you created in GitHub
+    # - If that environment has required reviewers,
+    #   the job will pause until they approve.
+    # -----------------------------------------------------
+    environment: production
+
+    steps:
+      - name: Waiting for approval
+        run: echo "Waiting for approval"
+
+      - name: Deployment started
+        run: echo "Deployment started"

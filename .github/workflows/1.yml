@@ -1,0 +1,29 @@
+name: task-1 # Workflow name shown in GitHub Actions tab
+
+# ----------------------------------------------------------
+# Trigger workflow ONLY when code is pushed to the main branch
+# ----------------------------------------------------------
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  hello-ci: # Job name as required
+    runs-on: ubuntu-latest # Use latest Ubuntu runner
+
+    steps:
+      # ------------------------------------------------------
+      # Step 1: Checkout the repository code so runner can access it
+      # ------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ------------------------------------------------------
+      # Step 2: Print required details using GitHub context variables
+      # ------------------------------------------------------
+      - name: Print CI Info
+        run: |
+          echo "Hello GitHub Actions"
+          echo "Repo: ${{ github.repository }}"          # owner/repo -> ${{ github.repository }} => context variable
+          echo "Branch: ${{ github.ref_name }}"          # actual branch name

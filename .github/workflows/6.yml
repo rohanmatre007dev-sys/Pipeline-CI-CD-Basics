@@ -1,0 +1,29 @@
+name: job-dependencies-demo # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: run manually from the "Run workflow" button
+# ---------------------------------------------------------
+on:
+  workflow_dispatch:
+
+jobs:
+  # -------------------------------------------------------
+  # 1) BUILD JOB
+  # -------------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build step
+        run: echo "Build completed"
+
+  # -------------------------------------------------------
+  # 2) TEST JOB
+  #    - Depends on build
+  #    - Will NOT run if build fails
+  # -------------------------------------------------------
+  test:
+    runs-on: ubuntu-latest
+    needs: build # test waits for build to finish
+    steps:
+      - name: Test step
+        run: echo "Tests running"

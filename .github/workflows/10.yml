@@ -1,0 +1,24 @@
+name: main-only # Workflow name
+
+# ---------------------------------------------------------
+# Trigger: on push to main OR develop branches
+# ---------------------------------------------------------
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  main-only:
+    runs-on: ubuntu-latest
+
+    # -----------------------------------------------------
+    # Run this job ONLY when the branch name is "main"
+    # Job-level IF condition (not step-level)
+    # -----------------------------------------------------
+    if: ${{ github.ref_name == 'main' }}
+
+    steps:
+      - name: Print message
+        run: echo "Running on main branch"
